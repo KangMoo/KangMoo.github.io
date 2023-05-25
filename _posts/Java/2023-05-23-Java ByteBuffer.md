@@ -2,11 +2,9 @@
 layout: post
 title: ByteBuffer를 이해하고 사용하기
 date: 2023-05-22 22:32
-category: Java
+categories: [Java]
 tags: [Java]
 ---
-
-Java의 Non-Blocking I/O 라이브러리(NIO)는 기존 IO API보다 더욱 효율적인 방법으로 데이터를 읽고 쓸 수 있게 해줍니다. 이 포스트에서는 이 NIO의 핵심 요소 중 하나인 `ByteBuffer`에 대해 알아보겠습니다.
 
 ## ByteBuffer란?
 
@@ -54,7 +52,7 @@ Java의 Non-Blocking I/O 라이브러리(NIO)는 기존 IO API보다 더욱 효�
 
 ## ByteBuffer의 사용 예시
 
-- P : Position, L : Limit C : Capacity
+- P : Position, L : Limit, C : Capacity
 
 ### `allocate`
 
