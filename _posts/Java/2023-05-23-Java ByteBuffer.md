@@ -1,7 +1,7 @@
 ---
 layout: post
 title: ByteBuffer를 이해하고 사용하기
-date: 2023-05-22 22:32
+date: 2023-05-23
 categories: [Java]
 tags: [Java]
 ---
