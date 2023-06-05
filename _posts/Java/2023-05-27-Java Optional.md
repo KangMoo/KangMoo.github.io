@@ -6,11 +6,15 @@ categories: [Java]
 tags: [Java]
 ---
 
-# Java Optional을 이해하고 활용하자
+## Java Optional을 이해하고 활용하자
+
+![NPE](/assets/img/2023-05-27-Java%20Optional/2023-06-04-18-24-02.png)
 
 개발을 하다보면 가장 많이 발생하는 예외 중 하나가 바로 NPE(Null Pointer Exception)입니다. 오늘은 자바에서 NPE를 회피하는 효과적인 방법을 제공하는 Optional 클래스에 대해 알아보돌 하겠습니다.
 
 ## Optional이란?
+
+![Optional](/assets/img/2023-05-27-Java%20Optional/2023-06-04-18-21-12.png)
 
 - Optional은 Java 8에서 도입된 클래스로, Null Pointer Exception을 방지하고, Null을 보다 명확하게 처리하도록 돕는 기능을 제공합니다.
 - Optional은 java.util 패키지에 포함되어 있는 클래스입니다. 이 클래스의 주 목적은 Null이 될 수 있는 객체를 감싸는 데에 있습니다.
@@ -38,7 +42,7 @@ Optional<String> optional = Optional.of("Hello World");
 
 위 코드는 "Hello World"라는 문자열을 가진 Optional 객체를 생성합니다.
 
-그런데 만약 Null 값을 가진 Optional 객체를 생성하려면 어떻게 해야 할까요? 그 경우에는V `Optional.empty()` 메서드를 사용합니다.
+그런데 만약 Null 값을 가진 Optional 객체를 생성하려면 어떻게 해야 할까요? 그 경우에는 `Optional.empty()` 메서드를 사용합니다.
 
 ```java
 Optional<String> optional = Optional.empty();
@@ -170,3 +174,22 @@ Optional<String> optional = Optional.of("Hello World");
 Optional<Optional<String>> mapped = optional.map(value -> Optional.of(value.toLowerCase())); // Optional[Optional["hello world"]]
 Optional<String> flatMapped = optional.flatMap(value -> Optional.of(value.toLowerCase())); // Optional["hello world"]
 ```
+
+## Optional 사용 시 주의사항
+
+![Optional](/assets/img/2023-05-27-Java%20Optional/2023-06-04-18-25-22.png)
+
+Java의 `Optional` 클래스는 null 값을 안전하게 처리하는 데 도움이 되는 강력한 도구이지만, 모든 상황에 적합한 것은 아닙니다. 대표적인 경우가 `Optional` 객체 자체가 null 인 경우입니다. 마지막으로 이와같은 `Optional` 사용에 대한 주요 고려 사항을 알려드리겠습니다.
+
+- **Optional이 null이 될 수 있는 경우**
+  - 아이러니하게도, `Optional` 객체 자체가 null이 될 수 있습니다. 이러한 상황은 피해야 합니다. `Optional`을 사용하는 주요 목적이 null 참조를 피하는 것이기 때문입니다.
+- **필드로서의 Optional**
+  - 일반적으로 클래스 필드로서 `Optional`을 사용하는 것은 권장되지 않습니다. `Optional`은 반환 타입으로 사용되거나 메소드 인자로 사용될 수 있지만, 필드에 `Optional`을 사용하면 메모리 사용량이 증가하고, 직렬화 문제가 발생할 수 있습니다.
+- **컬렉션과 배열에 대한 Optional**
+  - 컬렉션, 배열 또는 스트림에서 `Optional`을 사용하는 것은 일반적으로 불필요합니다. 이러한 타입들은 이미 "empty" 상태를 가질 수 있으므로, `Optional`을 사용하여 이를 표현하는 것은 복잡성을 불필요하게 증가시킵니다.
+- **비용과 성능**
+  - `Optional` 객체의 생성과 처리는 일정량의 오버헤드를 가집니다. 대부분의 경우, 이 오버헤드는 무시할 만큼 작지만, 성능이 매우 중요한 상황에서는 고려해야 할 요소입니다.
+- **Optional 체이닝**
+  - `Optional` 메소드를 체이닝하는 것은 코드를 간결하게 만들 수 있지만, 복잡한 체이닝은 가독성을 해칠 수 있습니다. 
+- **null 반환**
+  - `Optional`을 사용하는 주요 목적 중 하나는 null을 반환하는 것을 피하는 것입니다. 그러나 `Optional` 메소드 중 하나인 `orElse(null)`은 결국 null을 반환하게 됩니다. 이러한 사용은 `Optional`의 목적에 반하는 것으로 볼 수 있습니다.
