@@ -18,14 +18,15 @@ tags: [Java]
 - **컬렉션에서 짝수인 정수만 뽑아서 제곱**을 한 결과를 구하려고 한다고 했을 때, Stream을 사용하기 전/후의 코드를 비교하자면 다음과 같습니다.
 
 ## Stream 사용 전
-``` java
+
+```java
 List<Integer> numbers = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
 
 List<Integer> evenSquared = new ArrayList<>();
 for (Integer number : numbers) {
     if (number % 2 == 0) {
-        int squared = number * number;
-        evenSquared.add(squared);
+    int squared = number * number;
+    evenSquared.add(squared);
     }
 }
 
@@ -35,13 +36,14 @@ for (Integer squared : evenSquared) {
 ```
 
 ## Stream 사용 후
-``` java
+
+```java
 List<Integer> numbers = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
 
 List<Integer> evenSquared = numbers.stream()
-        .filter(number -> number % 2 == 0)
-        .map(number -> number * number)
-        .collect(Collectors.toList());
+    .filter(number -> number % 2 == 0)
+    .map(number -> number * number)
+    .collect(Collectors.toList());
 
 evenSquared.forEach(System.out::println);
 ```
@@ -93,9 +95,9 @@ Stream<String> streamEmpty = Stream.empty();
 
 ```java
 Stream<String> generatedStream = Stream.<String>builder()
-        .add("Hello")
-        .add("World")
-        .build();
+    .add("Hello")
+    .add("World")
+    .build();
 ```
 
 ### generate
@@ -145,8 +147,8 @@ DoubleStream doubles = new Random().doubles(3); // 난수 3개 생성
 ```java
 Stream<String> strStream = Arrays.asList("Hello", "World", "Java").stream();
 int sum = strStream.parallel()
-                   .mapToInt(s -> s.length())
-                   .sum();
+    .mapToInt(s -> s.length())
+    .sum();
 ```
 
 ## Stream 중간 연산
@@ -155,86 +157,133 @@ Java의 Stream API는 데이터 처리 연산을 지원하며, 이 중에서도 
 
 ### filter
 
-`filter` 메서드는 원하는 요소만 추출하기 위한 연산자로, `Predicate` 함수형 인터페이스를 사용합니다.
+- `filter` 메서드는 원하는 요소만 추출하기 위한 연산자로, 요소를 필터링하거나 제거하는 데 사용됩니다
+- `Predicate` 함수형 인터페이스를 사용합니다
 
 ```java
-Stream<T> filter(Predicate<? super T> predicate);
+List<String> names = Arrays.asList("John", "Sarah", "Mark", "Tina", "Sandy", "Mona");
+names.stream()
+    .filter(name -> name.startsWith("S"))
+    .forEach(System.out::println); // "Sarah", "Sandy" 만 출력됩니다.
 ```
 
 ### map
 
-`map` 메서드는 스트림 내 요소를 가공하는 연산자로, `Function` 함수형 인터페이스를 사용합니다.
+- `map` 메서드는 스트림 내 요소를 가공하는 연산자로, 스트림의 각 요소를 다른 형태의 요소로 변환하는 데 사용됩니다
+- `Function` 함수형 인터페이스를 사용합니다
 
 ```java
-<R> Stream<R> map(Function<? super T, ? extends R> mapper);
+List<String> names = Arrays.asList("John", "Sarah", "Mark", "Tina", "Sandy", "Mona");
+names.stream()
+    .map(String::toUpperCase)
+    .forEach(System.out::println); // 모든 이름이 대문자로 출력됩니다.
 ```
 
 ### flatMap
 
-`flatMap` 메서드는 중첩 구조를 한 단계 제거하고 단일 컬렉션으로 만들어주는 연산자로, `Function` 함수형 인터페이스를 사용합니다. `map`과의 가장 큰 차이는 함수의 반환 값이 Stream형태라는 점입니다.
+- `flatMap` 메서드는 중첩 구조를 한 단계 제거하고 단일 컬렉션으로 만들어주는 연산자입니다
+- `Function` 함수형 인터페이스를 사용합니다
+- `map`과의 가장 큰 차이는 함수의 반환 값이 `Stream`형태라는 점입니다
 
 ```java
-<R> Stream<R> flatMap(Function<? super T, ? extends Stream<? extends R>> mapper);
+List<List<String>> namesNested = Arrays.asList(
+  Arrays.asList("Jeff", "Bezos"),
+  Arrays.asList("Bill", "Gates"),
+  Arrays.asList("Mark", "Zuckerberg"));
+
+namesNested.stream()
+    .flatMap(Collection::stream)
+    .forEach(System.out::println); // 모든 이름을 하나의 스트림으로 출력합니다.
 ```
 
 ### sorted
 
-`sorted` 메서드는 스트림 요소를 정렬하는 연산자로, `Comparator` 함수형 인터페이스를 사용합니다.
+- `sorted` 메서드는 스트림 요소를 정렬하는 연산자로, 스트림의 요소를 정렬하는 데 사용됩니다
+- `Comparator` 함수형 인터페이스를 사용합니다
 
 ```java
-Stream<T> sorted();
-Stream<T> sorted(Comparator<? super T> comparator);
+List<String> names = Arrays.asList("John", "Sarah", "Mark", "Tina", "Sandy", "Mona");
+names.stream()
+     .sorted()
+     .forEach(System.out::println); // 이름이 알파벳순으로 출력됩니다.
 ```
 
 ### distinct
 
-`distinct` 메서드는 중복된 값을 제거하는 연산자입니다.
+- `distinct` 메서드는 중복된 값을 제거하는 연산자입니다.
 
 ```java
-Stream<T> distinct();
+List<String> names = Arrays.asList("John", "Sarah", "Mark", "Tina", "Sandy", "Mona", "John");
+names.stream()
+     .distinct()
+     .forEach(System.out::println); // 중복된 "John"이 제거되고 출력됩니다.
 ```
 
 ### peek
 
-`peek` 메서드는 각 요소에 특정 연산을 수행하는 연산자로, 결과에 영향을 주지 않습니다. 디버깅 용도로 주로 사용됩니다.
+- `peek` 메서드는 각 요소에 특정 연산을 수행하는 연산자로, 스트림의 각 요소를 소비하고 다른 연산에 영향을 주지 않는 데 사용됩니다
+- 결과에 영향을 주지 않으며 이 특성 때문에 주로 디버깅 용도로 사용됩니다.
 
 ```java
-Stream<T> peek(Consumer<? super T> action);
+List<String> names = Arrays.asList("John", "Sarah", "Mark", "Tina", "Sandy", "Mona");
+names.stream()
+     .peek(System.out::println)
+     .map(String::toUpperCase)
+     .forEach(System.out::println); // 각 이름이 한 번 출력되고, 그 다음에 대문자로 변환된 이름이 출력됩니다.
 ```
 
 ### limit
 
-`limit` 메서드는 앞에서부터 n개의 요소만 취하는 연산자입니다.
+- `limit` 메서드는 스트림의 크기를 제한하는 데 사용됩니다
+- 앞에서부터 n개의 요소만 취하는 연산자입니다.
 
 ```java
-Stream<T> limit(long maxSize);
+Stream.iterate(1, n -> n + 1)
+    .limit(5)
+    .forEach(System.out::println); // 1부터 5까지의 숫자를 출력합니다.
 ```
 
 ### skip
 
-`skip` 메서드는 스트림에서 앞선 n개의 요소를 건너뛰고 그 이후의 요소들만 선택하는 연산자입니다.
+- `skip` 메서드는 스트림의 처음 n개 요소를 무시하는 데 사용됩니다
+- 스트림에서 앞선 n개의 요소를 건너뛰고 그 이후의 요소들만 선택하는 연산자입니다.
 
 ```java
-Stream<T> skip(long n);
+Stream.iterate(1, n -> n + 1)
+    .skip(5)
+    .limit(5)
+    .forEach(System.out::println); // 6부터 10까지의 숫자를 출력합니다.
 ```
 
 ### concat
 
-`concat` 메서드는 두 Stream을 연결하는 연산자입니다.
+- `concat` 메서드는 두 Stream을 연결하는 연산자로, 두 스트림을 결합하는 데 사용됩니다
 
 ```java
-static <T> Stream<T> concat(Stream<? extends T> a, Stream<? extends T> b);
+Stream<String> stream1 = Stream.of("One", "Two", "Three");
+Stream<String> stream2 = Stream.of("Four", "Five", "Six");
+Stream<String> resultingStream = Stream.concat(stream1, stream2);
+resultingStream.forEach(System.out::println); // "One", "Two", "Three", "Four", "Five", "Six" 순으로 출력합니다.
 ```
-
-중간 연산자들은 결과가 필요하기 전까지 실행되지 않는다는 특징을 가지고 있습니다. 이를 "lazy한 처리"라고 하며, 실제로 필요한 시점까지 연산이 지연된다는 의미입니다. 따라서, 필요한 처리만 수행하여 효율적인 연산을 지원합니다. 이는 대량의 데이터를 처리할 때 유용합니다.
 
 ## Stream 최종 연산
 
 Java의 Stream API에서는 중간 연산 이외에도 최종 연산이라는 개념이 있습니다. 최종 연산은 스트림 파이프라인을 처리하고, 처리 결과를 반환하거나 또는 특정 동작을 수행합니다. 이 연산을 수행하면 스트림 파이프라인이 실행되며, 스트림이 소비되어 더 이상 사용할 수 없게 됩니다.
 
+### forEach
+
+- `forEach` 메서드는 스트림의 각 요소에 대해 동작을 수행합니다.
+- 이 메서드는 주로 스트림의 각 요소에 대한 부수적인 동작을 수행할 때 사용됩니다.
+
+```java
+List<String> names = Arrays.asList("John", "Sarah", "Mark", "Tina", "Sandy", "Mona");
+names.stream()
+    .forEach(System.out::println); // "John", "Sarah", "Mark", "Tina", "Sandy", "Mona"를 각 줄에 하나씩 출력합니다.
+```
+
 ### count, sum, min, max, average
 
-이 메서드들은 각각 스트림의 요소 수, 합, 최소값, 최대값, 평균을 계산합니다.
+- 이 메서드들은 각각 스트림의 요소 수, 합, 최소값, 최대값, 평균을 계산합니다.
 
 ```java
 long count = IntStream.of(1, 2, 3, 4, 5).count();
@@ -246,40 +295,128 @@ OptionalDouble average = IntStream.of(1, 2, 3, 4, 5).average();
 
 ### reduce
 
-`reduce`는 스트림의 요소를 축소하여 단일 결과를 생성합니다. 여기에는 세 가지 형태의 `reduce` 메서드가 있습니다:
+- `reduce`는 스트림의 요소를 축소하여 단일 결과를 생성합니다. 여기에는 세 가지 형태의 `reduce` 메서드가 있습니다
+  - `Optional<T> reduce(BinaryOperator<T> accumulator)`: 스트림의 요소를 누적하는 함수를 사용하여 reduce를 수행합니다. 초기값이 없어서 반환 값이 `Optional`입니다.
+  - `T reduce(T identity, BinaryOperator<T> accumulator)`: 초기값을 받아 reduce를 수행합니다. 초기값이 제공되므로, 결과는 Optional이 아닙니다.
+  - `<U> U reduce(U identity, BiFunction<U, ? super T, U> accumulator, BinaryOperator<U> combiner)`: 병렬 스트림 처리를 지원하는 reduce 메서드입니다. 병렬 처리의 경우, 누적 함수와 조합 함수를 제공해야 합니다.
 
-- `Optional<T> reduce(BinaryOperator<T> accumulator)`: 스트림의 요소를 누적하는 함수를 사용하여 reduce를 수행합니다. 초기값이 없어서 반환 값이 Optional입니다.
-- `T reduce(T identity, BinaryOperator<T> accumulator)`: 초기값을 받아 reduce를 수행합니다. 초기값이 제공되므로, 결과는 Optional이 아닙니다.
-- `<U> U reduce(U identity, BiFunction<U, ? super T, U> accumulator, BinaryOperator<U> combiner)`: 병렬 스트림 처리를 지원하는 reduce 메서드입니다. 병렬 처리의 경우, 누적 함수와 조합 함수를 제공해야 합니다.
+```java
+List<Integer> numbers = Arrays.asList(1, 2, 3, 4, 5);
+Optional<Integer> sum = numbers.stream()
+    .reduce(Integer::sum);
+sum.ifPresent(System.out::println); // 15가 출력됩니다.
+```
+
+```java
+List<Integer> numbers = Arrays.asList(1, 2, 3, 4, 5);
+int sum = numbers.stream()
+    .reduce(0, Integer::sum);
+System.out.println(sum); // 15가 출력됩니다.
+```
+
+```java
+List<Integer> numbers = Arrays.asList(1, 2, 3, 4, 5);
+String sum = numbers.stream()
+    .reduce("_", (partialString, number) -> partialString + number, String::concat);
+System.out.println(sum); // "_12345"가 출력됩니다.
+```
+
+```java
+List<Integer> numbers = Arrays.asList(1, 2, 3, 4, 5);
+String sum = numbers.parallelStream()
+    .reduce("_", (partialString, number) -> partialString + number, String::concat);
+System.out.println(sum); // "_1_2_3_4_5"가 출력됩니다.
+```
 
 ### collect
 
-`collect`는 스트림의 결과를 컬렉션으로 모읍니다. 이는 다양한 형태로 사용될 수 있습니다:
-
-- `Collectors.toList()`: 결과를 리스트로 반환합니다.
-- `Collectors.joining()`: 스트림의 결과를 문자열로 연결합니다.
-- `Collectors.partitioningBy()`: 조건에 따라 스트림의 요소를 분할합니다.
-- `Collectors.averagingInt()`, `Collectors.summingInt()`, `Collectors.summarizingInt()`: 평균, 합, 요약 통계 등의 연산을 수행합니다.
-
-### anyMatch(), allMatch(), noneMatch()
-
-이 메서드들은 스트림의 요소가 특정 조건을 만족하는지를 확인합니다. `anyMatch`는 하나라도 조건을 만족하면 true를 반환하며, `allMatch`는 모든 요소가 조건을 만족해야 true를 반환합니다. 반면, `noneMatch`는 모든 요소가 조건을 만족하지 않을 때 true를 반환합니다.
+- `collect`는 스트림의 결과를 컬렉션으로 모읍니다. 이는 다양한 형태로 사용될 수 있습니다
+- `Collectors`클래스는 `collect`를 손쉽게 사용하도록 도와준다.
+  - `Collectors.toList()`: 결과를 리스트로 반환합니다.
+  - `Collectors.toSet()`: 결과를 set으로 반환합니다.
+  - `Collectors.joining()`: 스트림의 결과를 문자열로 연결합니다.
+  - `Collectors.groupingBy()`: 특정 기준에 따라 스트림의 요소를 분할합니다.
+  - `Collectors.partitioningBy()`: 조건에 따라 스트림의 요소를 분할합니다.
+  - `Collectors.averagingInt()`, `Collectors.summingInt()`, `Collectors.summarizingInt()`: 평균, 합, 요약 통계 등의 연산을 수행합니다.
 
 ```java
-boolean anyMatch = IntStream.of(1, 2, 3, 4, 5).anyMatch(n -> n > 3);
-boolean allMatch = IntStream.of(1, 2, 3, 4, 5).allMatch(n -> n > 0);
-boolean noneMatch = IntStream.of(1, 2, 3, 4, 5).noneMatch(n -> n > 5);
+List<String> names = Arrays.asList("John", "Sarah", "Mark", "Tina", "Sandy", "Mona");
+List<String> upperCaseNames = names.stream()
+    .collect(ArrayList::new, (list, name) -> list.add(name.toUpperCase()), ArrayList::addAll);
+
+upperCaseNames.forEach(System.out::println); // 모든 이름이 대문자로 출력됩니다.
 ```
-
-### forEach()
-
-`forEach` 메서드는 스트림의 각 요소에 대해 동작을 수행합니다. 이 메서드는 주로 스트림의 각 요소에 대한 부수적인 동작을 수행할 때 사용됩니다.
 
 ```java
-IntStream.of(1, 2, 3, 4, 5).forEach(System.out::println);
+List<String> names = Arrays.asList("John", "Sarah", "Mark", "Tina", "Sandy", "Mona");
+List<String> upperCaseNames = names.stream()
+v.map(String::toUpperCase)
+    .collect(Collectors.toList());
+upperCaseNames.forEach(System.out::println); // 모든 이름이 대문자로 출력됩니다.
 ```
 
-이 예제에서 `forEach` 메서드는 스트림의 각 요소를 화면에 출력합니다. 이처럼 `forEach`는 반환 값이 없이 스트림의 각 요소에 대한 동작만 수행합니다.
+```java
+List<String> names = Arrays.asList("John", "Sarah", "Mark", "Tina", "Sandy", "Mona", "John");
+Set<String> uniqueNames = names.stream()
+    .collect(Collectors.toSet());
+System.out.println(uniqueNames); // [John, Sarah, Mark, Tina, Sandy, Mona]가 출력됩니다.
+```
+
+```java
+List<String> names = Arrays.asList("John", "Sarah", "Mark", "Tina", "Sandy", "Mona");
+String namesConcatenated = names.stream()
+    .collect(Collectors.joining(", "));
+System.out.println(namesConcatenated); // "John, Sarah, Mark, Tina, Sandy, Mona"가 출력됩니다.
+```
+
+```java
+List<String> names = Arrays.asList("John", "Sarah", "Mark", "Tina", "Sandy", "Mona", "John");
+Map<Integer, List<String>> groupedNames = names.stream()
+    .collect(Collectors.groupingBy(String::length));
+System.out.println(groupedNames); // {4=[John, Mark, Mona, John], 5=[Sarah, Sandy], 4=[Tina]}가 출력됩니다.
+```
+
+```java
+List<Integer> numbers = Arrays.asList(1, 2, 3, 4, 5, 6);
+Map<Boolean, List<Integer>> partitionedNumbers = numbers.stream()
+    .collect(Collectors.partitioningBy(n -> n % 2 == 0));
+System.out.println(partitionedNumbers); // {false=[1, 3, 5], true=[2, 4, 6]} 가 출력됩니다.
+```
+
+```java
+List<String> names = Arrays.asList("John", "Sarah", "Mark", "Tina", "Sandy", "Mona");
+double averageLength = names.stream()
+    .collect(Collectors.averagingInt(String::length));
+System.out.println(averageLength); // 이름들의 평균 길이가 출력됩니다.
+```
+
+### anyMatch, allMatch, noneMatch
+
+- 이 메서드들은 스트림의 요소가 특정 조건을 만족하는지를 확인합니다. `Predicate`를 인자로 받아 스트림의 요소에 대한 특정 조건을 검사합니다.
+- `anyMatch`는 하나라도 조건을 만족하면 true를 반환합니다.
+- `allMatch`는 모든 요소가 조건을 만족해야 true를 반환합니다.
+- `noneMatch`는 모든 요소가 조건을 만족하지 않을 때 true를 반환합니다.
+
+```java
+List<String> names = Arrays.asList("John", "Sarah", "Mark", "Tina", "Sandy", "Mona");
+boolean result = names.stream()
+    .anyMatch(name -> name.startsWith("S"));
+System.out.println(result); // true가 출력됩니다. (Sarah, Sandy가 S로 시작하기 때문에)
+```
+
+```java
+List<Integer> numbers = Arrays.asList(1, 2, 3, 4, 5);
+boolean result = numbers.stream()
+    .allMatch(n -> n > 0);
+System.out.println(result); // true가 출력됩니다. (모든 숫자가 0보다 크기 때문에)
+```
+
+```java
+List<Integer> numbers = Arrays.asList(1, 2, 3, 4, 5);
+boolean result = numbers.stream()
+    .noneMatch(n -> n < 0);
+System.out.println(result); // true가 출력됩니다. (모든 숫자가 0보다 크기 때문에)
+```
 
 # 스트림 디버깅과 성능 최적화
 
