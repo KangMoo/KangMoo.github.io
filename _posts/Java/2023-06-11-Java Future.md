@@ -22,7 +22,26 @@ Java에서 `Future`는 비동기 계산의 아직 계산되지 않은 결과를 
 
 ## Future 사용 예제
 
-**예제 1: `ExecutorService`와 `Future`를 이용해 비동기 작업을 실행하기**
+**예제 1: `Future` 생성 및 사용**
+
+``` java
+Callable<Integer> task = () -> {
+    Thread.sleep(1000);  // 1초동안 대기
+    return 123;  // 결과 반환
+};
+
+FutureTask<Integer> future = new FutureTask<>(task);
+new Thread(future).start();  // Future 작업 실행
+
+// 다른 작업 ...
+
+Integer result = future.get();  // 결과가 준비될 때까지 Blocking
+System.out.println("Result: " + result);
+```
+
+---
+
+**예제 2: `ExecutorService`와 `Future`를 이용해 비동기 작업을 실행하기**
 
 ```java
 // ExecutorService 생성
@@ -52,7 +71,7 @@ executor.shutdown();
 
 ---
 
-**예제2: `Future`에서 결과 가져오기**
+**예제3: `Future`에서 결과 가져오기**
 
 ```java
 ExecutorService executorService = Executors.newSingleThreadExecutor();
@@ -73,7 +92,7 @@ try {
 
 ---
 
-**예제 3: `Future`에서 타임아웃 설정하여 결과 가져오기**
+**예제 4: `Future`에서 타임아웃 설정하여 결과 가져오기**
 
 ```java
 ExecutorService executorService = Executors.newSingleThreadExecutor();
@@ -94,7 +113,7 @@ try {
 
 ---
 
-**예제 4: `Future` 작업 취소하기**
+**예제 5: `Future` 작업 취소하기**
 
 ```java
 ExecutorService executorService = Executors.newSingleThreadExecutor();
