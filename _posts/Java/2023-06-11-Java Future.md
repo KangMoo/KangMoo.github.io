@@ -3,7 +3,7 @@ layout: post
 title: Java의 Future에 대해 알아보자
 date: 2023-06-11
 categories: [Java]
-tags: [Java]
+tags: [Java, Future]
 ---
 
 ## Future란?
