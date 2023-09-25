@@ -60,7 +60,7 @@ tags: [Java]
 
 ```java
 CharBuffer buf = CharBuffer.allocate(8); // capacity : 8
-//	P               L
+//  P               L
 //  |0|1|2|3|4|5|6|7|
 //  | | | | | | | | |
 ```
@@ -72,7 +72,7 @@ CharBuffer buf = CharBuffer.allocate(8); // capacity : 8
 - put을 사용할 경우 Position이 이동하면서 버퍼에 데이터가 들어간다.
 
 ```java
-//	P               L
+//  P               L
 //  |0|1|2|3|4|5|6|7|
 //  | | | | | | | | |
 
