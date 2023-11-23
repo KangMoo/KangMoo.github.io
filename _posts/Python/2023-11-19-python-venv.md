@@ -8,7 +8,7 @@ tags: [Python]
 
 ## Python venv 란?
 
-![](/assets/img/2023-11-19-python-venv/2023-11-19-23-40-18.png)
+![Python venv](/assets/img/2023-11-19-python-venv/2023-11-19-23-40-18.png)
 
 - Python은 기본적으로 라이브러리와 패키지들이 시스템의 전역 환경에 설치된다.
   - 각 프로젝트별로 다른 버전의 라이브러리가 필요한 경우 충돌 문제가 발생했다.
