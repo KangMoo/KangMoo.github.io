@@ -37,7 +37,7 @@ $$ |A| = (\# elements) $$
 - **가산 무한 집합 (Countably Infinite Sets)**: 원소의 개수가 무한하지만 자연수와 일대일 대응이 가능한 집합. ex) 유리수 집합.
 
 <details>
-  <summary>양의 유리수의 가산성 (Countability of the Positive Rational Numbers)</summary>
+  <summary>양의 유리수의 가산성</summary>
   <div markdown="1">
 
   - 양의 유리수는 분모와 분자가 자연수인 수의 집합으로, 이들은 가산 무한 집합이다.
