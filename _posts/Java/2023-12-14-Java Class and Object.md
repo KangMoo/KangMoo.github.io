@@ -3,7 +3,7 @@ layout: post
 title: 자바의 클래스와 객체
 date: 2023-12-23
 categories: [Java]
-tags: [Java, Annotation]
+tags: [Java, Class, Object]
 ---
 
 ## 클래스(Class)란?
@@ -143,7 +143,7 @@ public class Animal {
         Animal dog = new Animal("Buddy", 3); // 객체 생성
         dog.displayInfo(); // 인스턴스 메서드 호출
 
-        System.out.println("Total Animals: " + Animal.getCount()); // 클래스 메서드 호출 (객체가 아닌 클래스로부터 값을 가져온다)
+        System.out.println("Total Animals: " + Animal.getCount()); // 클래스 메서드 호출
     }
 }
 
