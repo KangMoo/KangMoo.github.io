@@ -1,7 +1,7 @@
 ---
 layout: post
 title: 자바의 클래스와 객체
-date: 2023-12-23
+date: 2023-12-14
 categories: [Java]
 tags: [Java, Class, Object]
 ---
