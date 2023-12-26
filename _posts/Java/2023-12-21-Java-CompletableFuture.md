@@ -31,6 +31,8 @@ Java 5에서 도입된 `Future` 인터페이스는 비동기 계산의 결과를
 - 콜백 등록 : 콜백을 등록하여 작업이 완료되었을 때 특정 동작을 수행할 수 있으며 이를 통해 비동기 작업의 완료를 감지하고 그에 따른 동작을 정의할 수 있다
 - Custom Executor 지원 : Custom Executor를 사용하여 성능을 향상시킬 수 있으며 특정 상황에 맞는 실행자를 제공하여 작업을 처리할 수 있다
 - CompletionStage 구현 : `CompletionStage`를 구현하여 비동기 작업의 완료 여부를 기다리거나, 작업의 결과에 따라 다양한 동작을 수행할 수 있다
+- 명시적인 `Executor` 없이 사용하는 경우 `ForkJoinPool.commonPool()`을 사용한다
+  - 선택적으로 `Executor`를 지정하여 실행할 스레드를 제어할 수 있다
 
 ## CompletableFuture의 주요 메서드
 
@@ -39,12 +41,24 @@ Java 5에서 도입된 `Future` 인터페이스는 비동기 계산의 결과를
 - `runAsync(Runnable runnable)` / `runAsync(Runnable runnable, Executor executor)`
   - 비동기적으로 `Runnable` 작업을 실행한다
   - `runAsync`는 반환값이 없는 작업에 사용된다
-  - 선택적으로 `Executor`를 지정하여 실행할 스레드를 제어할 수 있다
 
 - `supplyAsync(Supplier<U> supplier)` / `supplyAsync(Supplier<U> supplier, Executor executor)`
   - 결과를 반환하는 비동기 작업을 실행한다
   - `Supplier` 인터페이스를 통해 값을 반환한다
   - `Executor`를 사용하여 작업이 실행될 스레드를 지정할 수 있다
+
+### 블록 및 넌블록 방식의 결과 가져오기
+
+- `get()` / `get(long timeout, TimeUnit unit)`
+  - 작업의 결과를 가져온다
+  - `get()`은 결과가 준비될 때까지 블록한다
+  - 타임아웃을 지정할 수 있다
+
+- `join()`
+  - `get()`과 유사하지만, 예외를 `RuntimeException`으로 감싸 반환한다
+
+- `getNow(T valueIfAbsent)`
+  - 작업이 완료되지 않았을 때 기본값을 반환한다
 
 ### 결과 처리
 
@@ -78,19 +92,6 @@ Java 5에서 도입된 `Future` 인터페이스는 비동기 계산의 결과를
 - `thenCompose(Function<? super T, ? extends CompletionStage<U>> fn)` / `thenComposeAsync(...)`
   - 현재 작업의 결과를 사용하여 새 `CompletableFuture`를 생성한다
   - 첫 번째 작업의 결과를 두 번째 작업의 입력으로 사용한다
-
-### 블록 및 넌블록 방식의 결과 가져오기
-
-- `get()` / `get(long timeout, TimeUnit unit)`
-  - 작업의 결과를 가져온다
-  - `get()`은 결과가 준비될 때까지 블록한다
-  - 타임아웃을 지정할 수 있다
-
-- `join()`
-  - `get()`과 유사하지만, 예외를 `RuntimeException`으로 감싸 반환한다
-
-- `getNow(T valueIfAbsent)`
-  - 작업이 완료되지 않았을 때 기본값을 반환한다
 
 ### 작업 완료
 
@@ -126,6 +127,40 @@ CompletableFuture<String> future = CompletableFuture.supplyAsync(() -> {
 
 > 비동기 작업을 수행하고 결과를 반환한다
 
+### 블록 및 넌블록 방식의 결과 가져오기
+
+- `get()` 예시
+
+```java
+CompletableFuture<String> future = CompletableFuture.supplyAsync(() -> "Hello");
+try {
+    String result = future.get();
+    System.out.println(result);
+} catch (InterruptedException | ExecutionException e) {
+    e.printStackTrace();
+}
+```
+
+> 작업의 완료를 기다린 후 결과를 반환한다
+
+- `join()` 예시
+
+```java
+CompletableFuture<String> future = CompletableFuture.supplyAsync(() -> "Hello");
+String result = future.join();
+```
+
+> `get()`과 유사하지만, Unchecked 예외를 던진다
+
+- `getNow(T valueIfAbsent)` 예시
+
+```java
+CompletableFuture<String> future = CompletableFuture.supplyAsync(() -> "Hello");
+String result = future.getNow("Default Value");
+```
+
+> 결과가 준비되지 않았을 때 기본값을 반환한다
+
 ### 결과 처리
 
 - `thenApply(Function<? super T,? extends U> fn)` 예시
@@ -134,6 +169,8 @@ CompletableFuture<String> future = CompletableFuture.supplyAsync(() -> {
 CompletableFuture<String> future = CompletableFuture
     .supplyAsync(() -> 123)
     .thenApply(result -> "Value: " + result);
+
+System.out.println(future.get());
 ```
 
 > 비동기 작업의 결과에 함수를 적용한다
@@ -171,6 +208,8 @@ CompletableFuture<String> future = CompletableFuture
         return "Success";
     })
     .exceptionally(ex -> "Error: " + ex.getMessage());
+
+System.out.println(future.get());
 ```
 
 > 비동기 작업 중 오류가 발생했을 때 대체 결과를 제공한다
@@ -183,6 +222,8 @@ CompletableFuture<String> future = CompletableFuture
 CompletableFuture<String> future1 = CompletableFuture.supplyAsync(() -> "Hello");
 CompletableFuture<String> future2 = CompletableFuture.supplyAsync(() -> "World");
 CompletableFuture<String> result = future1.thenCombine(future2, (s1, s2) -> s1 + " " + s2);
+
+System.out.println(result.get());
 ```
 
 > 두 개의 비동기 작업 결과를 결합한다
@@ -197,39 +238,6 @@ CompletableFuture<String> future = CompletableFuture
 
 > 첫 번째 작업의 결과를 사용하여 두 번째 비동기 작업을 시작한다
 
-### 블록 및 넌블록 방식의 결과 가져오기
-
-- `get()` 예시
-
-```java
-CompletableFuture<String> future = CompletableFuture.supplyAsync(() -> "Hello");
-try {
-    String result = future.get();
-} catch (InterruptedException | ExecutionException e) {
-    e.printStackTrace();
-}
-```
-
-> 작업의 완료를 기다린 후 결과를 반환한다
-
-- `join()` 예시
-
-```java
-CompletableFuture<String> future = CompletableFuture.supplyAsync(() -> "Hello");
-String result = future.join();
-```
-
-> `get()`과 유사하지만, 체크되지 않은 예외를 던진다
-
-- `getNow(T valueIfAbsent)` 예시
-
-```java
-CompletableFuture<String> future = CompletableFuture.supplyAsync(() -> "Hello");
-String result = future.getNow("Default Value");
-```
-
-> 결과가 준비되지 않았을 때 기본값을 반환한다
-
 ### 작업 완료
 
 - `complete(T value)` 예시
@@ -237,6 +245,8 @@ String result = future.getNow("Default Value");
 ```java
 CompletableFuture<String> future = new CompletableFuture<>();
 future.complete("Manual result");
+
+System.out.println(future.get());
 ```
 
 > CompletableFuture에 수동으로 결과를 설정한다
@@ -246,6 +256,13 @@ future.complete("Manual result");
 ```java
 CompletableFuture<String> future = new CompletableFuture<>();
 future.completeExceptionally(new RuntimeException("Failure"));
+
+try {
+    String result = future.get();
+    System.out.println(result);
+} catch (InterruptedException | ExecutionException e) {
+    e.printStackTrace();
+}
 ```
 
 > CompletableFuture에 예외를 수동으로 설정한다
