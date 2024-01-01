@@ -27,6 +27,6 @@ if RUBY_PLATFORM =~ /linux-musl/
   gem "jekyll-sass-converter", "~> 2.0"
 end
 
-# gem 'jekyll-admin', group: :jekyll_plugins
+gem 'jekyll-admin', group: :jekyll_plugins
 
 gem 'jekyll-sitemap'
