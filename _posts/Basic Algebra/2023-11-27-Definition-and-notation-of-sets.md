@@ -8,6 +8,11 @@ tags: [Basic Algebra, Sets]
 
 {% include katex.html %}
 
+$A = \left\{1,2,3,4,5\right\}$
+$$A = \left\{1,2,3,4,5\right\}$$
+$$B = \left\{a,b,c,d\right\}$$
+
+
 대수학을 이해하는 데 있어 기본적이고 중요한 개념 중 하나는 '집합(Set)'이다. 이 글에서는 집합이 무엇인지와 집합을 표현하는 다양한 방법에 대해 알아보자
 
 ## 집합이란?
