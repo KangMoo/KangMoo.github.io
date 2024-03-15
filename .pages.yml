@@ -1,4 +1,4 @@
-media: media
+media: assets/img
 content:
   - name: posts
     label: Posts
