@@ -6,11 +6,11 @@ categories: [Basic Algebra]
 tags: [Basic Algebra, Sets]
 ---
 
-{% include katex.html %}
+{% include mathjax.html %}
 
-$$A = \left\{1,2,3,4,5\right\}$$
+$A = \{\{1,2,3,4,5\}\}$
 
-$$B = \left\{a,b,c,d\right\}$$
+$B = \{\{a,b,c,d\}\}$
 
 대수학을 이해하는 데 있어 기본적이고 중요한 개념 중 하나는 '집합(Set)'이다. 이 글에서는 집합이 무엇인지와 집합을 표현하는 다양한 방법에 대해 알아보자
 
@@ -30,9 +30,9 @@ $$B = \left\{a,b,c,d\right\}$$
 - 집합의 원소를 순서에 상관없이 중괄호 `{ }` 안에 나열하는 방법이다
 - 원소의 순서는 중요하지 않으며, 중복되지 않게 원소는 한 번만 나열한다.
 
-> - 숫자의 집합 : $$A = \left\{1,2,3,4,5\right\}$$
-> - 문자의 집합 : $$B = \left\{a,b,c,d\right\}$$
-> - 혼합된 원소의 집합 : $$C = \left\{red,1,true,\pi \right\}$$
+> - 숫자의 집합 : $A = \{\{1,2,3,4,5\}\}$
+> - 문자의 집합 : $B = \{\{a,b,c,d\}\}$
+> - 혼합된 원소의 집합 : $C = \{\{red,1,true,\pi \}\}$
 
 ### 조건 제시법 (Set Builder)
 
@@ -42,9 +42,9 @@ $$B = \left\{a,b,c,d\right\}$$
 - 원소들이 만족해야 하는 조건을 명확하게 기술해야 한다.
 - 더 복잡하고 추상적인 집합을 정의할 때 유용하다.
 
-> - 짝수의 집합 : $$A = \left\{ x \lvert x는 짝수 \right\}$$
-> - 특정 조건을 만족하는 집합 : $$B = \left\{ y \lvert y > 0, y는 실수 \right\}$$
-> - 함수의 범위를 나타내는 집합 : $$C = \left\{ z \lvert z = x^{2}, 0 \leq  x \leq 5 \right\} $$
+> - 짝수의 집합 : $A = \{\{ x \lvert x는 짝수 \}\}$
+> - 특정 조건을 만족하는 집합 : $B = \{\{ y \lvert y > 0, y는 실수 \}\}$
+> - 함수의 범위를 나타내는 집합 : $C = \{\{ z \lvert z = x^{2}, 0 \leq  x \leq 5 \}\} $
 
 ### 벤 다이어그램 (Venn Diagram)
 
@@ -58,63 +58,63 @@ $$B = \left\{a,b,c,d\right\}$$
 
 ### 전체 집합 (Universal Set)
 
-- **기호**: $$U$$ 또는 $$S$$
+- **기호**: $U$ 또는 $S$
 - 특정 상황 또는 문맥에서 고려되는 모든 가능한 원소를 포함하는 집합
 
 ### 공집합 (Empty Set)
 
-- **기호**: $$\phi$$ 또는 $$ \left\{ \right\} $$
+- **기호**: $\phi$ 또는 $ \{\{ \}\} $
 - 원소가 전혀 없는 집합으로 집합 간의 연산에서 '없음' 또는 '빈 경우'를 나타내는 집합
 
-> - 두 집합 $$A = \left\{1,2,3 \right\}$$ 와 $$B = \left\{4,5,6 \right\}$$의 교집합 : $$A \cap B = \phi $$
-> - 어떤 조건을 만족하는 원소가 없는 경우 : $$\left\{ x \lvert x < 0, x는 자연수 \right\} = \phi $$
+> - 두 집합 $A = \{\{1,2,3 \}\}$ 와 $B = \{\{4,5,6 \}\}$의 교집합 : $A \cap B = \phi $
+> - 어떤 조건을 만족하는 원소가 없는 경우 : $\{\{ x \lvert x < 0, x는 자연수 \}\} = \phi $
 
 ### 자연수 (Natural Numbers)
 
-- **기호**: $$ \mathbb{N} $$
+- **기호**: $ \mathbb{N} $
 
-> $$ \mathbb{N} = \{1, 2, 3, \ldots\} $$
+> $ \mathbb{N} = \{1, 2, 3, \ldots\} $
 
 ### 전체수 (Whole Numbers)
 
-- **기호**: $$ \mathbb{W} $$
+- **기호**: $ \mathbb{W} $
 - 자연수에 0을 포함한 집합
 
-> $$ \{0, 1, 2, \ldots\} $$
+> $ \{0, 1, 2, \ldots\} $
 
 ### 정수 (Integers)
 
-- **기호**: $$ \mathbb{Z} $$
+- **기호**: $ \mathbb{Z} $
 
-> $$ \mathbb{Z} = \{\ldots, -3, -2, -1, 0, 1, 2, 3, \ldots\} $$
+> $ \mathbb{Z} = \{\ldots, -3, -2, -1, 0, 1, 2, 3, \ldots\} $
 
 ### 유리수 (Rational Numbers)
 
-- **기호**: $$ \mathbb{Q} $$
+- **기호**: $ \mathbb{Q} $
 - 분수 형태로 표현되는 모든 수들의 집합
 
-> $$ \mathbb{Q} = \left\{ \frac{p}{q} | p, q \in \mathbb{Z}, q \neq 0 \right\} $$
+> $ \mathbb{Q} = \{\{ \frac{p}{q} | p, q \in \mathbb{Z}, q \neq 0 \}\} $
 
 ### 무리수 (Irrational Numbers)
 
-- **기호**: $$ \mathbb{I} $$
+- **기호**: $ \mathbb{I} $
 - 유리수로 표현될 수 없는 수들의 집합
 
-> $$ \{x | x \text{는 무리수}\} $$
+> $ \{x | x \text{는 무리수}\} $
 
 ### 실수 (Real Numbers)
 
-- **기호**: $$ \mathbb{R} $$
+- **기호**: $ \mathbb{R} $
 - 모든 유리수와 무리수를 포함하는 집합
 
-> $$ \mathbb{R} = \{x | x \text{는 유리수 또는 무리수}\} $$
+> $ \mathbb{R} = \{x | x \text{는 유리수 또는 무리수}\} $
 
 ### 복소수 (Complex Numbers)
 
-- **기호**: $$ \mathbb{C} $$
+- **기호**: $ \mathbb{C} $
 - 실수와 허수를 모두 포함하는 집합
 
-> $$ \mathbb{C} = \{a + bi | a, b \in \mathbb{R}, i = \sqrt{-1}\} $$
+> $ \mathbb{C} = \{a + bi | a, b \in \mathbb{R}, i = \sqrt{-1}\} $
 
 ## 집합으로 표현되는 함수와 공간
 
@@ -128,24 +128,24 @@ $$B = \left\{a,b,c,d\right\}$$
 
 - 기하학적 공간에서의 위치와 형태를 정의하는 직선과 평면 등을 표현하는데도 사용할 수 있다
 
-> $$ L = \{(x,y) | y = ax + b\} $$
+> $ L = \{(x,y) | y = ax + b\} $
 
-> $$ P = \{(x,y,z) | n \cdot (r - r_0) = 0\} $$
+> $ P = \{(x,y,z) | n \cdot (r - r_0) = 0\} $
 
 ### 방정식과 부등식의 해집합
 
 - 방정식과 부등식의 해를 집합으로 표현할 수 있다
 
-> $$ S = \{x | f(x) = 0\} $$
+> $ S = \{x | f(x) = 0\} $
 
-> $$ S = \{x | f(x) < 0\} $$
+> $ S = \{x | f(x) < 0\} $
 
 ### 좌표 공간
 
 - 물리적 또는 추상적 공간에서의 위치와 다차원 공간을 나타내는 데 사용될 수 있다
 
-> $$ \mathbb{R}^2 = \{(x,y)\} $$
+> $ \mathbb{R}^2 = \{(x,y)\} $
 
-> $$ \mathbb{R}^3 = \{(x,y,z)\} $$
+> $ \mathbb{R}^3 = \{(x,y,z)\} $
 
-> $$ \mathbb{R}^n = \{(x_1, x_2, \ldots, x_n)\} $$
+> $ \mathbb{R}^n = \{(x_1, x_2, \ldots, x_n)\} $
