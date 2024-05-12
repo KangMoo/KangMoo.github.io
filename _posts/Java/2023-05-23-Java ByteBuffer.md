@@ -8,53 +8,87 @@ tags: [Java]
 
 ## ByteBuffer란?
 
-- `ByteBuffer`는 Java NIO 라이브러리의 중요한 컴포넌트로, 바이트 기반 데이터를 처리하는 데 사용됩니다. 이는 파일이나 네트워크로부터 데이터를 읽거나 쓸 때, 그리고 바이트 기반 데이터를 처리할 때(예: 암호화, 압축 등) 유용합니다.
 
-## ByteBuffer의 네 가지 포인터
+- 자바 NIO(Non-blocking I/O)에서 제공하는 클래스로, 바이트 배열에 대한 처리를 효율적으로 수행할 수 있게 돕는다.
+- 바이트 데이터를 읽고 쓰는 데 사용되며, 네트워크 통신이나 파일 I/O에서 특히 유용하다.
+- 네트워크 소켓에서 데이터를 읽거나 파일로부터 데이터를 읽는 등의 입출력 연산을 비동기적으로 수행할 수 있게 해준다. 이는 블로킹 I/O와 비교하여 효율적인 성능을 제공한다.
+- 바이트 배열 외에도 원시 데이터 타입(primitive data types)을 읽고 쓸 수 있게 해준다.
+- capacity(버퍼의 총 용량), limit(버퍼에서 읽거나 쓸 수 있는 최대 범위), position(현재 읽거나 쓰기를 수행하고 있는 위치) 등의 상태를 가지며, 이를 통해 바이트 데이터를 유연하게 조작할 수 있다.
+- ByteBuffer는 `DirectByteBuffer와` `HeapByteBuffer` 두 가지 주요 형태가 있다. `DirectByteBuffer`는 자바 힙 외부에서 메모리를 할당받아 사용하며, 시스템 내부적으로 네이티브 I/O 연산을 효율적으로 수행할 수 있다. 반면, `HeapByteBuffer`는 자바 힙 내부에 데이터를 저장하는 버퍼이다.
 
-- `ByteBuffer`는 내부적으로 바이트 배열을 유지하며, 이 배열을 사용해 데이터를 읽고 쓰는 역할을 합니다. 이를 더욱 효율적으로 사용하도록 돕는 것이 바로 `position`, `limit`, `capacity` 등의 개념들입니다.
-  
-- Position : 버퍼에서 현재 읽고 쓰는 위치를 나타냅니다. 즉, 데이터를 읽거나 쓰는 작업이 수행될 때마다 position 값이 증가합니다. 
-- Limit : 버퍼에서 읽거나 쓸 수 있는 데이터의 최대 범위를 표시합니다. 쓰기 모드에서 limit는 일반적으로 capacity와 같습니다. 읽기 모드에서는 새로 읽을 수 있는 바이트의 수를 나타냅니다.
-- Capacity : 버퍼가 저장할 수 있는 데이터의 최대 크기를 나타냅니다. `ByteBuffer`가 처음 생성될 때 설정되며, 이후 변경될 수 없습니다.
-- Mark : 버퍼의 특정 위치를 기억하기 위한 장치입니다. 나중에 `reset()` 메서드를 호출하면 position이 이 mark 위치로 돌아갑니다. 기본적으로 mark는 정의되지 않은 상태이며, `mark()` 메서드를 호출해야만 설정됩니다.
+## ByteBuffer의 특징
 
-> 각 포인터의 제약조건은 다음과 같다
-> 0 <= mark <= position <= limit <= capacity
+- 커널 버퍼에 직접 접근할 수 있는 NIO의 장점을 이용하기 위해서는 ByteBuffer 클래스만 Direct Buffer를 지원한다.
+  - 즉, 커널 버퍼에 직접 접근할 수 있는 NIO의 장점을 이용하기 위해서는 ByteBuffer의 allocateDirect()라는 메서드를 이용해서 ByteBuffer를 만들어 내야 한다.
+- 자바가 C에 비해 느린 이유 중 하나는 IO가 JVM 내부에 IO 버퍼를 두었기 때문인데, ByteBuffer를 사용함으로 속도 향상이 가능하다.
+- 특히 네트워크 통신 등 byte배열 사용이 잦은 경우 GC가 성능에 영향을 끼질 수 있지만 ByteBuffer는 이러한 상황을 예방해줄 수 있다.
 
-## ByteBuffer의 주요 메서드
-- `allocate(int capacity)`
-   - JVM 힙 메모리에 ByteBuffer를 할당합니다. 이는 주로 JVM 내부에서 데이터를 읽고 쓰는 작업에 사용됩니다.
-- `allocateDirect(int capacity)`
-   - 주 메모리에 직접적으로 할당된(ByteBuffer에게 독립적인) ByteBuffer를 생성합니다. 이 메서드를 사용하면, I/O 작업을 할 때 시스템이 별도의 버퍼를 사용할 필요 없이 해당 버퍼를 직접 사용할 수 있어, 버퍼링 오버헤드를 줄일 수 있습니다.
-- `put(byte b)`
-   - 현재 position 위치에 바이트를 쓰고, position을 하나 증가시킵니다.
-- `get()`
-   - 현재 position의 바이트를 읽고, position을 하나 증가시킵니다.
-- `flip()`
-   - 버퍼를 읽기 모드로 바꾸기 위해 limit을 현재 position으로 설정하고, position을 0으로 설정합니다.
-- `rewind()`
-   - position을 0으로 설정합니다. 이를 통해 버퍼의 데이터를 다시 읽거나 쓸 수 있게 됩니다.
-- `compact()`
-   - 현재 position부터 limit까지의 남아있는 데이터를 버퍼의 시작으로 이동시키고, position을 새로운 limit로 설정합니다. 이는 쓰기 모드로 전환할 때 주로 사용됩니다.
-- `hasRemaining()`
-   - position과 limit 사이에 읽거나 쓸 수 있는 요소가 남아있는지를 확인합니다. 남아있는 요소가 있으면 true를 반환하고, 그렇지 않으면 false를 반환합니다.
-- `clear()`
-   - position을 0으로, limit을 capacity로 설정하여 버퍼를 초기화합니다. 이는 버퍼를 새로 쓰기 위해 사용됩니다.
-- `mark()`
-   - mark를 현재 position으로 설정합니다. 이는 특정 position을 나중에 다시 참조하기 위해 사용됩니다.
-- `reset()`
-   - position을 이전에 mark로 설정한 위치로 되돌립니다.
-- `wrap(byte[] array)`
-   - 주어진 바이트 배열을 감싸는 ByteBuffer를 생성합니다. 이 ByteBuffer의 capacity와 limit는 주어진 배열의 길이와 같게 설정됩니다. 이 메서드는 기존 배열을 버퍼로 쉽게 변환할 수 있게 해줍니다.
+![image](/assets/img/2023-05-23-Java%20ByteBuffer/2024-05-12-18-06-23.png)
 
-> `allocate`는 일반적인 용도에 적합하며, `allocateDirect`는 대용량 데이터 처리나 장시간 동안 살아있는 버퍼가 필요한 특정한 경우에 적합합니다.
+### java.nio의 Buffer 계층도
 
-## ByteBuffer의 사용 예시
+![image](/assets/img/2023-05-23-Java%20ByteBuffer/2024-05-12-18-06-34.png)
 
-- P : Position, L : Limit, C : Capacity
+#### ByteBuffer의 생성 방법 3가지
 
-### `allocate`
+- allocate : **JVM의 힙 영역**에 바이트 버퍼를 생성한다. 인수는 생성할 바이트 버퍼 크기다.
+  - 생성시간이 빠르지만, 입출력 성능은 낮다
+- allocateDirect : JVM 힙 영역이 아닌 **운영체제의 커널 영역**에 바이트 버퍼를 생성한다.
+  - 생성시간이 느리지만, 입출력 성능은 높다
+- wrap : 입력된 바이트 배열을 사용하여 바이트 버퍼를 생성한다. 입력에 사용된 바이트 배열이 변경되면 wrap을 사용하여 생성한 바이트 버퍼도 변경된다
+
+#### ByteBuffer의 네 가지 포인터
+
+- ByteBuffer에는 위치를 나타내는 네가지 포인터가 있다.
+  - **position, limit, capacity, mark**
+  - **0 <= mark <= position <= limit <= capacity**
+- **position** : 현재 읽을 위치나 현재 쓸 위치를 가리킨다. ByteBuffer에서 get()함수로 읽기를 시도할 경우 position 위치부터 읽기 시작하여, put()함수로 ByteBuffer에 쓰기를 시도할 경우 position 위치부터 쓰기를 시작한다. 읽거나 쓸 때마다 position의 위치는 자동으로 이동한다
+- **limit** : 현재 ByteBuffer의 유요한 쓰기 위치나 유효한 읽기 위치를 나타낸다. 다시 말해 "이 버퍼는 여기까지 읽을 수 있습니다" 혹은 "여기까지 쓸 수 있습니다"를 나타낸다.
+- **capacity** : ByteBuffer의 용량을 나타낸다. 따라서 항상 ByteBuffer의 맨 마지막을 가리키고 있다. 그 때문에 position과 limit와는 달리 그 위치를 바꿀 필요가 없다
+- **mark** : 편리한 표인터이다. 특별한 의미가 있는 건 아니고 사용자가 마음대로 지정할 수 있다. 특별히 이 위치를 기억하고 있다가 다음데 되돌아가야할 때 사용한다.
+
+#### java.nio.Buffer의 주요 메서드
+
+- `clear()` -> return Buffer
+  - 말 그대로 초기화
+  - 포지션을 0으로 설정
+- `flip()` -> return Buffer
+  - 마지막으로 썼던 버퍼를 읽기 좋게 변경
+  - 포지션을 0으로 설정
+  - limit을 현재 내용의 마지막 위치로 압축
+- `hasRemaining()` -> return Buffer
+  - 포지션과 리미트가 같지 않은지 확인
+  - 버퍼내 내용이 있으면 true
+- `rewind()` -> return Buffer
+  - 포지션은 맨 처음으로 초기화 됨
+  - 포지션이 0이 아닐 때 0으로 위치시킴
+- `mark()` -> return Position
+  - 현재 위치(P)를 임시 저장한다.
+- `reset()` -> return Position
+  - 임시저장된 위치로 다시 P를 옮겨놓는다.
+  - mark-reset은 주로 데이터를 미리 살짝 읽어볼 때 (Peek) 주로 쓴다
+  - reset과 clear는 헷갈리기 쉬우니 주의
+
+#### java.nio.ByteBuffer의 주요 메서드
+
+- `compact()` -> abstact ByteBuffer
+  - 포지션과 리미트를 앞당기고 다음 포지션과 리미트를 설정
+- `wrap(byte[] array)` -> static ByteBuffer
+  - byte[]를 byteBuffer로 만듦
+  - 만들어진 ByteBuffer는 byte[]에 의존하게 되며, capcaity, limit은 byte[]의 사이즈와 같음
+
+## ByteBuffer의 get()/put()
+
+- `get()`, `put()` 은 각각 버퍼에 데이터를 읽고 쓰는 메서드이다
+- `get()`, `put()` 은 다시 상대적/절대적으로 구분된다
+  - 상대적 `get()`, `put()` : position값 증가
+  - 절대적 `get()`, `put()` : position값 변화없음
+
+### 예시 (CharBuffer 사용)
+
+- P : Position, L : Limit C : Capacity
+
+#### allocate
 
 - 8개의 글자가 들어갈 수 있는 버퍼를 만든다. allocate하면 버퍼는 현재 쓰기모드이다
 
@@ -65,9 +99,7 @@ CharBuffer buf = CharBuffer.allocate(8); // capacity : 8
 //  | | | | | | | | |
 ```
 
-
-
-### `put`
+#### put
 
 - put을 사용할 경우 Position이 이동하면서 버퍼에 데이터가 들어간다.
 
@@ -78,78 +110,106 @@ CharBuffer buf = CharBuffer.allocate(8); // capacity : 8
 
 buf.put('a'); buf.put('b'); buf.put('c'); buf.put('e');
 
-// P------>P       L 
+// P------>P       L
 // |0|1|2|3|4|5|6|7|
 // |a|b|c|e| | | | |
 
 buf.put(3,'d');
 
-//         P       L 
+//         P       L
 // |0|1|2|3|4|5|6|7|
 // |a|b|c|d| | | | |
 ```
 
-
-
-### `flip`
+#### flip
 
 - 입력된 데이터를 읽기 위해 read-mode로 바꾼다. (읽기 좋게 바꾼다)
 - 버퍼의 시작이자 데이터의 시작인 0으로 Position을 이동하고, 데이터의 끝 부분에 L이 위치하게 된다.
   - Limit이 Position이 되고, Position이 0이 된다.
 
 ```java
-//         P       L 
+//         P       L
 // |0|1|2|3|4|5|6|7|
 // |a|b|c|d| | | | |
 
 buf.flip();
 
-//          L<------L 
-//  P<------P 
+//          L<------L
+//  P<------P
 //  |0|1|2|3|4|5|6|7|
-//  |a|b|c|d| | | | | 
+//  |a|b|c|d| | | | |
 //  L = P
 //  P = 0
 ```
 
-
-
-### `get`
+#### get
 
 - Position을 이동시키며 데이터를 읽는다
 
 ```java
-//  P               L
+//  P       L       
 //  |0|1|2|3|4|5|6|7|
-//  |a|b|c|d| | | | | 
+//  |a|b|c|d| | | | |
 
 char a, b, c;
 a = buf.get(); b = buf.get(); c = buf.get();
 
-// P---->P         L 
+// P---->P L       
 // |0|1|2|3|4|5|6|7|
 // |a|b|c|d| | | | |
 ```
 
-
-
-### `compact`
+#### compact
 
 - 데이터를 쓰기모드로 바꾼다.
 - 읽지 않은 데이터 'd'가 복사되고, 'd'의 바로 뒤에 쓸 수 있도록 Position이 변했다.
 
 ```java
-//       P         L 
+//       P L       
 // |0|1|2|3|4|5|6|7|
 // |a|b|c|d| | | | |
 
 buf.compact();
 
 //   P<--P
-//         L------>L 
-// |0|1|2|3|4|5|6|7| 
-// |d| | | | | | | | 
-// 남아있는 데이터를 처음으로 복사 
-// P = 남아있는 데이터 수 
+//         L------>L
+// |0|1|2|3|4|5|6|7|
+// |d| | | | | | | |
+// 남아있는 데이터를 처음으로 복사
+// P = 남아있는 데이터 수
 // L = C
+```
+
+```java
+import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
+
+public class ByteBufferExample {
+    public static void main(String[] args) {
+        // 문자열
+        String input = "Hello, ByteBuffer";
+
+        // 문자열을 바이트 배열로 변환
+        byte[] inputData = input.getBytes(StandardCharsets.UTF_8);
+
+        // ByteBuffer를 생성
+        ByteBuffer buffer = ByteBuffer.allocate(inputData.length);
+
+        // 데이터를 ByteBuffer에 쓰기
+        buffer.put(inputData);
+
+        // 버퍼를 flip하여 읽기 모드로 전환
+        buffer.flip();
+
+        // ByteBuffer에서 데이터 읽기
+        byte[] outputData = new byte[buffer.remaining()];
+        buffer.get(outputData);
+
+        // 읽은 데이터를 문자열로 변환
+        String output = new String(outputData, StandardCharsets.UTF_8);
+
+        System.out.println("Input: " + input);
+        System.out.println("Output: " + output);
+    }
+}
 ```
