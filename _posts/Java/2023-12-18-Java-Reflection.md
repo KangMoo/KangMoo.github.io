@@ -6,7 +6,7 @@ categories: [Java]
 tags: [Java, Reflection]
 ---
 
-![java_reflection_humor](/assets/img/2023-12-14-Java-Reflection/2023-12-19-09-39-29.png)
+![java_reflection_humor](/assets/img/2023-12-18-Java-Reflection/2024-06-17-09-52-31.png)
 
 ## 자바의 리플렉션(Reflection)이란?
 

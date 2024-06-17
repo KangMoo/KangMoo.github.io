@@ -180,7 +180,7 @@ public class AnnotationExample {
 
 #### 예시 1 : 리플렉션을 통한 어노테이션 조회
 
-``` java
+```java
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.reflect.Method;
@@ -223,7 +223,7 @@ public class AnnotationReflectionExample {
 
 > **실행 결과**
 >
-> ``` shell
+> ```shell
 > Value: Hello, Annotation!
 > ```
 
@@ -268,7 +268,7 @@ public class AnnotationReflectionExample2 {
 
 > **실행 결과**
 >
-> ``` shell
+> ```shell
 > exampleMethod 실행 시간: 79ms
 > ```
 
