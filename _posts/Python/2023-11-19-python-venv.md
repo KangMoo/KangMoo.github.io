@@ -26,7 +26,7 @@ tags: [Python]
 
 - 가상 환경을 생성하려면 먼저 프로젝트의 루트 디렉토리로 이동한 뒤, 터미널에서 다음 명령어를 입력하여 새로운 가상 환경을 생성한다.
 
-``` bash
+```bash
 python -m venv myenv
 ```
 
@@ -38,19 +38,22 @@ python -m venv myenv
 - 생성된 가상 환경을 사용하기 위해 활성화해야 한다.
 
 - Linux/macOS에서
-  ``` bash
+
+  ```bash
   source myenv/bin/activate
   ```
 
 - Windows에서
-  ``` cmd
+
+  ```cmd
   myenv\Scripts\activate
   ```
 
 ### 3. 가상 환경 비활성화
 
 - `deactivate` 명령어로 활성화하고 원래의 시스템 환경으로 돌아갈 수 있다.
-  ``` bash
+
+  ```bash
   deactivate
   ```
 
@@ -61,15 +64,19 @@ python -m venv myenv
 가상 환경을 활성화한 후, `pip` 를 사용하여 필요한 Python 패키지들을 설치 및 관리를 할 수 있다.
 
 - 패키지 설치
-  ``` bash
+
+  ```bash
   pip install package_name
   ```
+
   > 프로젝트에 필요한 패키지를 설치하는 명령어. `package_name`은 설치하려는 패키지의 이름이다
 
 - 패키지 목록 확인
-  ``` bash
+
+  ```bash
   pip list
   ```
+
   > 설치된 패키지와 그 버전을 확인한다
 
 ### 의존성 관리
@@ -77,15 +84,19 @@ python -m venv myenv
 프로젝트의 의존성을 효과적으로 관리하려면, `requirements.txt` 파일을 사용하는 것이 일반적이며, 가상 환경에서도 역시 `requirements.txt` 를 사용이 가능하다.
 
 - 의존성 목록 생성
-  ``` bash
+
+  ```bash
   pip freeze > requirements.txt
   ```
+
   > 현재 환경에 설치된 모든 패키지와 그 버전을 requirements.txt 파일에 기록한다.
 
 - 의존성 설치
-  ``` bash
+
+  ```bash
   pip install -r requirements.txt
   ```
+
   > 프로젝트를 다른 환경으로 이동시킬 때, `requirements.txt` 파일을 사용하여 동일한 의존성을 쉽게 설치할 수 있다.
 
 ## 팁
@@ -99,6 +110,7 @@ python -m venv myenv
 
 - 서로 다른 Python 버전을 사용하는 여러 프로젝트를 관리할 때는, 각 프로젝트에 맞는 Python 버전으로 가상 환경을 설정하는 것이 좋다. 예를 들어, Python 3.7을 사용하는 프로젝트와 Python 3.8을 사용하는 프로젝트는 각각 다른 가상 환경을 필요로 한다.
 - 특정 Python 버전으로 가상 환경을 생성하려면, 해당 Python 인터프리터를 직접 지정할 수 있다. 예를 들어, Python 3.8을 사용하여 가상 환경을 생성하려면 다음과 같이 명령어를 사용한다.
-  ``` bash
+
+  ```bash
   python3.8 -m venv myenv
   ```
