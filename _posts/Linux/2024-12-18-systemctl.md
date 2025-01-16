@@ -4,7 +4,6 @@ title: systemctl을 사용하여 커스텀 서비스 등록방법
 date: 2024-12-18
 categories: [Linux]
 tags: [Linux, OS]
-author: KangMoo
 summary: 리눅스의 systemctl 명령어를 사용하여 서비스를 관리하는 방법을 알아보자.
 ---
 

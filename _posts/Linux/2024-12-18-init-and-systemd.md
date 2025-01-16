@@ -4,7 +4,6 @@ title: 리눅스의 init 프로세스와 systemd 프로세스
 date: 2024-12-17
 categories: [Linux]
 tags: [Linux, OS]
-author: KangMoo
 summary:
 ---
 
