@@ -3,7 +3,7 @@ layout: post
 title: Python venv란?
 date: 2023-11-19
 category: [Python]
-tags: [Python]
+tags: [Python, venv]
 ---
 
 ## Python venv 란?
