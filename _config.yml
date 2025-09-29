@@ -146,7 +146,7 @@ pwa:
     # Usually its value is the `baseurl` of another website that
     # shares the same domain name as the current website.
     deny_paths:
-    # - "/example"  # URLs match `<SITE_URL>/example/*` will not be cached by the PWA
+      # - "/example"  # URLs match `<SITE_URL>/example/*` will not be cached by the PWA
 
 paginate: 10
 
@@ -214,7 +214,7 @@ exclude:
   - README.md
   - LICENSE
   - purgecss.js
-  - rollup.config.js
+  - "*.config.js"
   - "package*.json"
 
 jekyll-archives:
